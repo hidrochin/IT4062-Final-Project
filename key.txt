@@ -1,0 +1,4 @@
+Which country is in Asia?:VIET NAM
+What is the capital of France?:PARIS
+A?:BAS AFA
+C?:DAA FVN
