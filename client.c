@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     // Step 4: Communicate with server
     // Step 4.1: Send username to server
 
-    printf("Welcome to Wheel of Fortune\n");
+    printf("Welcome to Guessing Word Game\n");
 
 back:
     printf("Please enter your username: ");
@@ -163,7 +163,7 @@ void send_server(int connfd, conn_msg_type conn_msg)
 
 void print_title()
 {
-    printf("Wheel of Fortune\n");
+    printf("Guessing word\n");
     printf("====================================\n\n");
 }
 

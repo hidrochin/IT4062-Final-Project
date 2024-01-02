@@ -6,7 +6,7 @@
 #include <string.h>
 #include <time.h>
 
-#define PLAYER_PER_ROOM 1
+#define PLAYER_PER_ROOM 2
 
 // Define structure of player
 typedef struct player_type_t
@@ -95,7 +95,7 @@ waiting_room_type init_waiting_room()
     return waiting_room;
 }
 
-game_state_type init_game_state(char key[])
+game_state_type init_game_state(char key[], char main_question[])
 {
     game_state_type game_state;
 
@@ -156,18 +156,20 @@ game_state_type init_game_state(char key[])
 
     
     // Init crossword by binding key
-    init_crossword(key, game_state.crossword);
-
-    init_key(game_state.main_question, key);
-    // Print statements for debugging
-    // printf("Before init_crosswordaaa: Key: %s, Crossword: %s\n", key, game_state.crossword);
-
-    // // Init crossword by binding key
     // init_crossword(key, game_state.crossword);
 
-    // // Print statements for debugging
-    // printf("After init_crosswordbbb: Key: %s, Crossword: %s\n", key, game_state.crossword);
-    // printf("Length of key: %zu\n", strlen(key));
+    // init_key(game_state.main_question, key);
+    strcpy(game_state.main_question, main_question);
+    // Print statements for debugging
+    printf("Before init_crosswordaaa: Key: %s, Crossword: %s\n", key, game_state.crossword);
+
+    // Init crossword by binding key
+    init_crossword(key, game_state.crossword);
+
+    // Print statements for debugging
+    printf("After init_crosswordbbb: Key: %s, Crossword: %s\n", key, game_state.crossword);
+    printf("Length of key: %zu\n", strlen(key));
+    printf("Length of crossword: %zu\n", strlen(game_state.crossword));
 
     // Init turn, start from 0
     game_state.turn = 0;

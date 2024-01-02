@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
 }
 
 void print_crossword(game_state_type *game_state) {
-    printf("Current Crossword: %s\n", game_state->crossword);
+    printf("[DEBUG] Current Crossword: %s\n", game_state->crossword);
 }
 
 
@@ -192,7 +192,7 @@ void *client_handle(void *arg)
     key[strlen(key) - 1] = '\0';
 
     // Init game state
-    game_state_type game_state = init_game_state(key);
+    game_state_type game_state = init_game_state(key, main_question);
 
     // Init player
     for (i = 0; i < client_room.joined; i++)
@@ -420,21 +420,59 @@ void summary(game_state_type *game_state)
     int i;
     char temp[100];
     int max_point = 0;
-    int winner = 0;
+    
+    // Track the number of winners
+    int num_winners = 0;
+    
     sprintf(game_state->game_message, "Summary:\n");
+    
     for (i = 0; i < PLAYER_PER_ROOM; i++)
     {
         if (game_state->player[i].point > max_point)
         {
             max_point = game_state->player[i].point;
-            winner = i;
+            num_winners = 1; // Reset the count for a new highest score
         }
+        else if (game_state->player[i].point == max_point)
+        {
+            // Another player with the same highest score
+            num_winners++;
+        }
+
         sprintf(temp, "%s: %d points\n", game_state->player[i].username, game_state->player[i].point);
         strcat(game_state->game_message, temp);
     }
-    sprintf(temp, "Winner: %s\n", game_state->player[winner].username);
-    strcat(game_state->game_message, temp);
+    
+    // Check if there are multiple winners
+    if (num_winners > 1)
+    {
+        strcat(game_state->game_message, "Winners: ");
+    }
+    else
+    {
+        strcat(game_state->game_message, "Winner: ");
+    }
+
+    // Track the number of winners added to the message
+    int winners_added = 0;
+
+    for (i = 0; i < PLAYER_PER_ROOM; i++)
+    {
+        if (game_state->player[i].point == max_point)
+        {
+            if (winners_added > 0)
+            {
+                strcat(game_state->game_message, ", ");
+            }
+
+            strcat(game_state->game_message, game_state->player[i].username);
+            winners_added++;
+        }
+    }
+
+    strcat(game_state->game_message, "\n");
 }
+
 
 int is_exist_username(waiting_room_type waiting_room, char *username)
 {
